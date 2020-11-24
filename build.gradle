@@ -1,0 +1,72 @@
+plugins {
+	id 'org.springframework.boot' version '2.4.0'
+	id 'io.spring.dependency-management' version '1.0.10.RELEASE'
+	id 'java'
+	id 'com.palantir.docker' version '0.25.0'
+	id "com.palantir.docker-run" version "0.25.0"
+	id "com.palantir.docker-compose" version "0.25.0"
+}
+
+group = 'pho.formulaone.web'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	compileOnly 'org.projectlombok:lombok'
+	runtimeOnly 'org.postgresql:postgresql'
+	annotationProcessor 'org.projectlombok:lombok'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation "org.junit.jupiter:junit-jupiter-api:5.6.2"
+	testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.6.2"
+}
+
+test {
+	useJUnitPlatform()
+}
+
+task unpack(type: Copy) {
+	dependsOn bootJar
+	from(zipTree(tasks.bootJar.outputs.files.singleFile))
+	into("build/docker/dependency")
+}
+
+docker {
+	tag 'local', 'functional-formula-one-web:latest'
+	tag 'localVersion', "functional-formula-one-web:${version}"
+	name 'functional-formula-one-web'
+	buildArgs([DEPENDENCY: "dependency", APPCLASS: 'pho.formulaone.web.FunctionalFormulaOneWebApplication'])
+	dockerfile file("Dockerfile")
+}
+
+dockerCompose {
+	template 'src/main/docker/docker-compose.functionalformulaoneweb.yml'
+	dockerComposeFile "$buildDir/docker/ortolanuniverse/docker-compose.yml"
+	templateTokens([
+			'ffoneweb.version': "$project.version",
+	])
+}
+
+dockerRun {
+	name = "functional-formula-one-web-main"
+	image = "functional-formula-one-web"
+	ports("8080:8080")
+}
+
+dockerPrepare.dependsOn unpack
+
+configure(unpack) {
+	group = 'docker'
+	description = 'Unpacks the boot jar so we can build multi-layer images'
+}
