@@ -24,16 +24,33 @@ repositories {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'junit:junit:4.12'
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'org.postgresql:postgresql'
 	annotationProcessor 'org.projectlombok:lombok'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation('org.springframework.boot:spring-boot-starter-test') {
+		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+	}
+	testImplementation "org.mockito:mockito-junit-jupiter:3.2.4"
 	testImplementation "org.junit.jupiter:junit-jupiter-api:5.6.2"
 	testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.6.2"
+	testImplementation "io.cucumber:cucumber-java:5.5.0"
+	testImplementation "io.cucumber:cucumber-spring:5.5.0"
+	testImplementation "io.cucumber:cucumber-junit:5.5.0"
+	testImplementation "net.masterthought:cucumber-reporting:4.2.3"
+	testCompile "org.testcontainers:postgresql:1.14.3"
+	testImplementation "org.testcontainers:junit-jupiter:1.12.3"
+	testCompile group: 'com.google.code.gson', name: 'gson', version: '2.8.3'
+	testImplementation "org.mockito:mockito-junit-jupiter:3.6.0"
 }
 
 test {
-	useJUnitPlatform()
+	filter {
+		excludeTestsMatching  "*CucumberTest*"
+	}
+	useJUnitPlatform {
+		excludeTags 'behaviour'
+	}
 }
 
 task unpack(type: Copy) {
@@ -69,4 +86,43 @@ dockerPrepare.dependsOn unpack
 configure(unpack) {
 	group = 'docker'
 	description = 'Unpacks the boot jar so we can build multi-layer images'
+}
+
+task cucumber(type: Test){
+	filter {
+		includeTestsMatching  "*CucumberTest*"
+	}
+	check.dependsOn it
+	shouldRunAfter test
+}
+
+configure(cucumber) {
+	group = 'verification'
+	description = 'Runs the Cucumber Tests'
+}
+
+task onlyMe(type: Test){
+	systemProperty  "CUCUMBER_FILTER_TAGS", "@onlyMe"
+	filter {
+		includeTestsMatching  "*CucumberTest*"
+	}
+	shouldRunAfter test
+}
+
+configure(onlyMe) {
+	group = 'verification'
+	description = 'Runs only a subset of the cucumber tests marked with @onlyMe tag. Useful for debugging'
+}
+
+task integrationTest(type: Test){
+	useJUnitPlatform {
+		includeTags 'behaviour'
+	}
+	check.dependsOn it
+	shouldRunAfter test
+}
+
+configure(integrationTest) {
+	group = 'verification'
+	description = 'Runs the Integration Tests'
 }

@@ -32,10 +32,10 @@ public class RaceData {
     private String raceCircuitName;
     private String raceLocality;
     private String raceCountry;
-    private int pilotNumber;
-    private int pilotPosition;
-    private int pilotGrid;
     private String pilotName;
+    private int pilotNumber;
+    private int pilotGrid;
+    private int pilotPosition;
     private String constructorName;
     private int fastestLapRank;
     private String status;
