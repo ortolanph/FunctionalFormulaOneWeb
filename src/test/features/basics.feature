@@ -1,4 +1,7 @@
-Feature: Basic information from the database
+Feature: Basic information
+
+  Background:
+    Given The basics API sample data
 
   Scenario: All the seasons
     When I want a list of all seasons

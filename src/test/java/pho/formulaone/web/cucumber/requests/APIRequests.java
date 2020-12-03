@@ -1,4 +1,4 @@
-package pho.formulaone.web.cucumber;
+package pho.formulaone.web.cucumber.requests;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -11,7 +11,7 @@ import static io.cucumber.spring.CucumberTestContext.SCOPE_CUCUMBER_GLUE;
 
 @Component
 @Scope(SCOPE_CUCUMBER_GLUE)
-public class BasicAPIRequests {
+public class APIRequests {
 
     @LocalServerPort
     private int port;
@@ -23,6 +23,12 @@ public class BasicAPIRequests {
         String SERVER_URL = "http://localhost";
         String BASICS_API_ENDPOINT = "/api/basics";
         return SERVER_URL + ":" + port + BASICS_API_ENDPOINT;
+    }
+
+    private String positionsAPIEndpoint() {
+        String SERVER_URL = "http://localhost";
+        String BASICS_API_ENDPOINT = "/api/positions";
+        return String.format("%s:%d%s", SERVER_URL, port, BASICS_API_ENDPOINT);
     }
 
     public ResponseEntity<String> allSeasons() {
@@ -48,5 +54,10 @@ public class BasicAPIRequests {
     public ResponseEntity<String> constructorsPerSeson() {
         String path = "/constructorsperseason";
         return restTemplate.getForEntity(basicsAPIEndpoint() + path, String.class);
+    }
+
+    public ResponseEntity<String> grid(int season, int round) {
+        String path = String.format("%s/season/%d/round/%d/grid", positionsAPIEndpoint(), season, round);
+        return restTemplate.getForEntity(positionsAPIEndpoint() + path, String.class);
     }
 }

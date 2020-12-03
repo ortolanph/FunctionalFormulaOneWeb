@@ -1,76 +1,64 @@
 package pho.formulaone.web.cucumber;
 
 import io.cucumber.core.internal.gherkin.deps.com.google.gson.Gson;
+import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import org.junit.ClassRule;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.util.TestPropertyValues;
-import org.springframework.context.ApplicationContextInitializer;
-import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.test.context.ContextConfiguration;
-import org.testcontainers.containers.JdbcDatabaseContainer;
-import org.testcontainers.containers.PostgreSQLContainer;
-import pho.formulaone.web.FunctionalFormulaOneWebApplication;
-import pho.formulaone.web.annotation.BehaviourTest;
+import org.springframework.core.io.FileUrlResource;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+import org.springframework.jdbc.datasource.init.ScriptUtils;
+import pho.formulaone.web.cucumber.requests.APIRequests;
 
+import javax.sql.DataSource;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@SpringBootTest(
-        classes = FunctionalFormulaOneWebApplication.class,
-        webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-@BehaviourTest
-@ContextConfiguration(initializers = {BasicAPITest.Initializer.class})
 public class BasicAPITest {
 
-    @ClassRule
-    public static JdbcDatabaseContainer postgreSQLContainer = new PostgreSQLContainer("postgres:latest").withInitScript("basics.sql");
-
-    static class Initializer
-            implements ApplicationContextInitializer<ConfigurableApplicationContext> {
-
-        public void initialize(ConfigurableApplicationContext configurableApplicationContext) {
-            postgreSQLContainer.start();
-            TestPropertyValues.of(
-                    "spring.datasource.url="+postgreSQLContainer.getJdbcUrl()
-            ).applyTo(configurableApplicationContext.getEnvironment());
-        }
-    }
-
     @Autowired
-    protected BasicAPIRequests basicAPIRequests;
+    protected APIRequests apiRequests;
 
     @Autowired
     protected ResponseEntityWrapper responseEntityWrapper;
 
+    @Autowired
+    private DataSource datasource;
+
+    @Given("The basics API sample data")
+    public void theBasicsAPISampleData() throws SQLException {
+        Resource resource = new FileUrlResource(getClass().getResource("/basics.sql"));
+        ScriptUtils.executeSqlScript(datasource.getConnection(), resource);
+    }
+
     @When("I want a list of all seasons")
     public void iWantAListOfAllSeasons() {
-        responseEntityWrapper.response = basicAPIRequests.allSeasons();
+        responseEntityWrapper.response = apiRequests.allSeasons();
     }
 
     @When("I want the total of races")
     public void iWantTheTotalOfRaces() {
-        responseEntityWrapper.response = basicAPIRequests.totalRaces();
+        responseEntityWrapper.response = apiRequests.totalRaces();
     }
 
     @When("I want the total races per season")
     public void iWantTheTotalRacesPerSeason() {
-        responseEntityWrapper.response = basicAPIRequests.racesPerSeason();
+        responseEntityWrapper.response = apiRequests.racesPerSeason();
     }
 
     @When("I want the total racers per season")
     public void iWantTheTotalRacersPerSeason() {
-        responseEntityWrapper.response = basicAPIRequests.racersPerSeson();
+        responseEntityWrapper.response = apiRequests.racersPerSeson();
     }
 
     @When("I want the total constructors per season")
     public void iWantTheTotalConstructorsPerSeason() {
-        responseEntityWrapper.response = basicAPIRequests.constructorsPerSeson();
+        responseEntityWrapper.response = apiRequests.constructorsPerSeson();
     }
 
     @Then("I expect to see the following list")
@@ -97,5 +85,4 @@ public class BasicAPITest {
 
         assertEquals(expected, actual);
     }
-
 }
