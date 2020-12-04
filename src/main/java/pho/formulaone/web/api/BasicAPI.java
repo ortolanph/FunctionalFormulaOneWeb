@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import pho.formulaone.web.controller.BasicService;
+import pho.formulaone.web.service.BasicService;
 
 import java.util.List;
 import java.util.Map;

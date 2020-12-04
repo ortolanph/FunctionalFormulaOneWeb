@@ -9,6 +9,6 @@ import java.util.List;
 @Repository
 public interface RaceDataRepository extends JpaRepository<RaceData, Long> {
 
-    List<RaceData> findAllBySeasonNumberAndSeasonRound(int season, int round);
+    List<RaceData> findAllBySeasonNumberAndSeasonRound(Integer season, Integer round);
 
 }

@@ -1,5 +1,6 @@
-package pho.formulaone.web.controller;
+package pho.formulaone.web.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pho.formulaone.web.persistence.entities.RaceData;
@@ -10,6 +11,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class BasicService {
 
     @Autowired
@@ -20,6 +22,7 @@ public class BasicService {
     }
 
     public Integer totalRaces() {
+        log.debug("BASICS_API_TOTAL_RACES");
         return racesPerSeason()
                 .values()
                 .stream()
@@ -29,6 +32,7 @@ public class BasicService {
 
 
     public Map<Integer, Integer> racesPerSeason() {
+        log.debug("BASICS_API_RACES_PER_SEASON");
         List<RaceData> allData = repository.findAll();
         List<Integer> allSeasons = allSeasons(allData);
 
@@ -43,6 +47,7 @@ public class BasicService {
     }
 
     public Map<Integer, Long> racersPerSeason() {
+        log.debug("BASICS_API_RACERS_PER_SEASON");
         List<RaceData> allData = repository.findAll();
         List<Integer> allSeasons = allSeasons(allData);
 
@@ -57,6 +62,7 @@ public class BasicService {
     }
 
     public Map<Integer, Long> constructorsPerSeason() {
+        log.debug("BASICS_API_CONSTRUCTORS_PER_SEASON");
         List<RaceData> allData = repository.findAll();
         List<Integer> allSeasons = allSeasons(allData);
 

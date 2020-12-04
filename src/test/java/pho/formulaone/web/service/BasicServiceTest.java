@@ -1,4 +1,4 @@
-package pho.formulaone.web.controller;
+package pho.formulaone.web.service;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
