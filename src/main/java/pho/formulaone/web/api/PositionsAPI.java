@@ -43,4 +43,22 @@ public class PositionsAPI {
     RaceResult poleposition(@PathVariable("season") Integer season, @PathVariable("round") Integer round) {
         return positionService.poleposition(season, round);
     }
+
+    @GetMapping("/season/{season}/round/{round}/endtoend")
+    public @ResponseBody
+    Boolean endToEnd(@PathVariable("season") Integer season, @PathVariable("round") Integer round) {
+        return positionService.endToEnd(season, round);
+    }
+
+    @GetMapping("/season/{season}/endtoend")
+    public @ResponseBody
+    List<RaceResult> endToEnd(@PathVariable("season") Integer season) {
+        return positionService.endToEnd(season);
+    }
+
+    @GetMapping("/endtoend")
+    public @ResponseBody
+    List<RaceResult> endToEnd() {
+        return positionService.endToEnd();
+    }
 }

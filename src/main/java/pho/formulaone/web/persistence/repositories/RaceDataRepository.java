@@ -11,4 +11,6 @@ public interface RaceDataRepository extends JpaRepository<RaceData, Long> {
 
     List<RaceData> findAllBySeasonNumberAndSeasonRound(Integer season, Integer round);
 
+    List<RaceData> findAllBySeasonNumber(Integer season);
+
 }

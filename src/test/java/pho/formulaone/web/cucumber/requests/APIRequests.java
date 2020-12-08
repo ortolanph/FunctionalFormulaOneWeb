@@ -75,4 +75,14 @@ public class APIRequests {
         String path = String.format("%s/season/%d/round/%d/poleposition", positionsAPIEndpoint(), season, round);
         return restTemplate.getForEntity(path, String.class);
     }
+
+    public ResponseEntity<String> endToEndChecker(Integer season, Integer round) {
+        String path = String.format("%s/season/%d/round/%d/endtoend", positionsAPIEndpoint(), season, round);
+        return restTemplate.getForEntity(path, String.class);
+    }
+
+    public ResponseEntity<String> endToEndSeason(Integer season) {
+        String path = String.format("%s/season/%d/endtoend", positionsAPIEndpoint(), season);
+        return restTemplate.getForEntity(path, String.class);
+    }
 }
