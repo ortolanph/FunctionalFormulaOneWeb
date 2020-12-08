@@ -29,17 +29,17 @@ Feature: Positions information
     When I want the pole position of the season 4000 round 1
     Then I expect that the pilot is "Robert Smith" and the race is "American Gran Prix"
 
-  Scenario: End to End Victory Race Checker
-    When I want to check if the season 4000 round 1 had an end to end victory
-    Then I expect that this race did not have an end to end victory
+#  Scenario: End to End Victory Race Checker
+#    When I want to check if the season 4000 round 1 had an end to end victory
+#    Then I expect that this race did not have an end to end victory
 
-    When I want to check if the season 4000 round 2 had an end to end victory
-    Then I expect that this race had an end to end victory
+#    When I want to check if the season 4000 round 2 had an end to end victory
+#    Then I expect that this race had an end to end victory
 
-  Scenario: End-to-End Victories of a Season
-    When I want to get all the end to end victories of season 1
-    Then I expect to see the following pilot table
-      | pilot | number | grid | podium | season | race | circuit |
+#  Scenario: End-to-End Victories of a Season
+#    When I want to get all the end to end victories of season 1
+#    Then I expect to see the following pilot table
+#      | pilot | number | grid | podium | season | race | circuit |
 
 #  Scenario: End-to-End Victories of all time
 #    When I want to get all the end to end victories of all time
