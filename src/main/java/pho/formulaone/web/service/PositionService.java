@@ -13,8 +13,8 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-@Service
 @Slf4j
+@Service
 public class PositionService {
 
     @Autowired
@@ -28,13 +28,13 @@ public class PositionService {
 
     public List<RaceResult> grid(int season, int round) {
         log.debug("POSITIONS_API_GRID (SEASON={}, ROUND={})", season, round);
-        List<RaceData> roundData = repository.findAllBySeasonNumberAndSeasonRound(season, round);
+        List<RaceData> roundData = seasonData(season, round);
         return orderBy(Comparator.comparingInt(RaceResult::getGrid), roundData);
     }
 
     public List<RaceResult> podium(Integer season, Integer round) {
         log.debug("POSITIONS_API_PODIUM (SEASON={}, ROUND={})", season, round);
-        List<RaceData> roundData = repository.findAllBySeasonNumberAndSeasonRound(season, round);
+        List<RaceData> roundData = seasonData(season, round);
         return orderBy(Comparator.comparingInt(RaceResult::getPodium), roundData);
     }
 
@@ -50,7 +50,7 @@ public class PositionService {
 
     public Boolean endToEnd(Integer season, Integer round) {
         log.debug("POSITIONS_API_END_TO_END(SEASON={}, ROUND={})", season, round);
-        List<RaceData> roundData = repository.findAllBySeasonNumberAndSeasonRound(season, round);
+        List<RaceData> roundData = seasonData(season, round);
 
         long countEndToEnd = roundData
                 .stream()
@@ -62,12 +62,16 @@ public class PositionService {
 
     public List<RaceResult> endToEnd(Integer season) {
         log.debug("POSITIONS_API_END_TO_END(SEASON={})", season);
-        return filterData(repository.findAllBySeasonNumber(season));
+        return filter(repository.findAllBySeasonNumber(season));
     }
 
     public List<RaceResult> endToEnd() {
         log.debug("POSITIONS_API_END_TO_END");
-        return filterData(repository.findAll());
+        return filter(repository.findAll());
+    }
+
+    private List<RaceData> seasonData(Integer season, Integer round) {
+        return repository.findAllBySeasonNumberAndSeasonRound(season, round);
     }
 
     protected List<RaceResult> orderBy(Comparator<RaceResult> comparator, List<RaceData> data) {
@@ -78,7 +82,7 @@ public class PositionService {
                 .collect(Collectors.toList());
     }
 
-    protected List<RaceResult> filterData(List<RaceData> data) {
+    protected List<RaceResult> filter(List<RaceData> data) {
         return data
                 .stream()
                 .filter(END_TO_END_PREDICATE)
@@ -87,3 +91,5 @@ public class PositionService {
                 .collect(Collectors.toList());
     }
 }
+
+

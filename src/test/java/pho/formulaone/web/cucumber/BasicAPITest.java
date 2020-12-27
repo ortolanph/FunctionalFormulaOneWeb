@@ -1,5 +1,6 @@
 package pho.formulaone.web.cucumber;
 
+import com.google.gson.reflect.TypeToken;
 import io.cucumber.core.internal.gherkin.deps.com.google.gson.Gson;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileUrlResource;
 import org.springframework.core.io.Resource;
 import org.springframework.jdbc.datasource.init.ScriptUtils;
+import pho.formulaone.web.beans.RaceResult;
 import pho.formulaone.web.cucumber.requests.APIRequests;
 
 import javax.sql.DataSource;
@@ -61,10 +63,10 @@ public class BasicAPITest {
     }
 
     @Then("I expect to see the following list")
-    public void iExpectToSeeTheFollowingList(List<Double> expected) {
+    public void iExpectToSeeTheFollowingList(List<Long> expected) {
         Gson gson = new Gson();
         String result = responseEntityWrapper.response.getBody();
-        List<Double> actual = gson.fromJson(result, List.class);
+        List<Long> actual = gson.fromJson(result, new TypeToken<List<Long>>(){}.getType());
 
         assertEquals(expected, actual,"ALL SEASONS");
     }
@@ -77,10 +79,10 @@ public class BasicAPITest {
     }
 
     @Then("I expect to see the following table")
-    public void iExpectToSeeTheFollowingTable(Map<String, Double> expected) {
+    public void iExpectToSeeTheFollowingTable(Map<String, Long> expected) {
         Gson gson = new Gson();
         String result = responseEntityWrapper.response.getBody();
-        Map<String, Long> actual = gson.fromJson(result, Map.class);
+        Map<String, Long> actual = gson.fromJson(result, new TypeToken<Map<String, Long>>(){}.getType());
 
         assertEquals(expected, actual);
     }

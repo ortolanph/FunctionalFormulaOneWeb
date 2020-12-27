@@ -5,6 +5,7 @@ import com.google.gson.reflect.TypeToken;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileUrlResource;
 import org.springframework.core.io.Resource;
@@ -20,6 +21,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@Slf4j
 public class PositionsAPITest {
 
     @Autowired
@@ -57,7 +59,6 @@ public class PositionsAPITest {
         responseEntityWrapper.response = apiRequests.poleposition(season, round);
     }
 
-/*
     @When("I want to check if the season {int} round {int} had an end to end victory")
     public void iWantToCheckIfTheSeasonRoundHadAnEndToEndVictory(Integer season, Integer round) {
         responseEntityWrapper.response = apiRequests.endToEndChecker(season, round);
@@ -67,7 +68,6 @@ public class PositionsAPITest {
     public void iWantToGetAllTheEndToEndVictoriesOfSeason(Integer season) {
         responseEntityWrapper.response = apiRequests.endToEndSeason(season);
     }
-*/
 
     /*
     @When("I want to get all the end to end victories of all time")
@@ -94,18 +94,22 @@ public class PositionsAPITest {
         assertEquals(race, actual.getRace(),"WINNER OR POLE: race");
     }
 
-/*    @Then("I expect that this race had an end to end victory")
-    public void iExpectThatThisRaceHadAnEndToEndVictory() {
-        String result = responseEntityWrapper.response.getBody();
-        boolean endToEnd = Boolean.getBoolean(result);
-        assertTrue("End to End checker: End to End", endToEnd);
-    }
-
     @Then("I expect that this race did not have an end to end victory")
     public void iExpectThatThisRaceDidNotHaveAnEndToEndVictory() {
         String result = responseEntityWrapper.response.getBody();
         boolean notEndToEnd = Boolean.getBoolean(result);
+        log.warn("RESULT: {}", result);
+        log.warn("PARSED: {}", notEndToEnd);
         assertFalse("End to End checker: Not End to End", notEndToEnd);
-    }*/
+    }
+
+    @Then("I expect that this race had an end to end victory")
+    public void iExpectThatThisRaceHadAnEndToEndVictory() {
+        String result = responseEntityWrapper.response.getBody();
+        boolean endToEnd = Boolean.getBoolean(result);
+        log.warn("RESULT: {}", result);
+        log.warn("PARSED: {}", endToEnd);
+        assertTrue("End to End checker: End to End", endToEnd);
+    }
 
 }

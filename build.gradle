@@ -24,7 +24,7 @@ repositories {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'junit:junit:4.12'
+	implementation 'org.projectlombok:lombok:1.18.16'
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'org.postgresql:postgresql'
 	annotationProcessor 'org.projectlombok:lombok'
@@ -45,6 +45,7 @@ dependencies {
 	implementation "org.mapstruct:mapstruct:1.4.1.Final"
 	annotationProcessor "org.mapstruct:mapstruct-processor:1.4.1.Final"
 	testAnnotationProcessor "org.mapstruct:mapstruct-processor:1.4.1.Final"
+	testAnnotationProcessor 'org.projectlombok:lombok'
 }
 
 test {
