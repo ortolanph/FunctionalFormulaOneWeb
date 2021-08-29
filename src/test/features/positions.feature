@@ -48,5 +48,5 @@ Feature: Positions information
   Scenario: End-to-End Victories of all time
     When I want to get all the end to end victories of all time
     Then I expect to see the following pilot table
-      | pilot | number | grid | podium | season | race | circuit |
+      | pilot         | number | grid | podium | season | round | race               | circuit   |
       | Robert Smith  | 42     | 1    | 1      | 4000   | 2     | European Gran Prix | Euro Race |
