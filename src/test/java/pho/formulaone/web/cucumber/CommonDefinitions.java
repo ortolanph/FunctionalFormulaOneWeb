@@ -1,6 +1,7 @@
 package pho.formulaone.web.cucumber;
 
 import io.cucumber.java.DataTableType;
+import io.cucumber.spring.CucumberContextConfiguration;
 import org.junit.ClassRule;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.util.TestPropertyValues;
@@ -15,6 +16,7 @@ import pho.formulaone.web.beans.RaceResult;
 
 import java.util.Map;
 
+@CucumberContextConfiguration
 @SpringBootTest(
         classes = FunctionalFormulaOneWebApplication.class,
         webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)

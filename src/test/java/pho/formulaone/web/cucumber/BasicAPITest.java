@@ -1,7 +1,8 @@
 package pho.formulaone.web.cucumber;
 
-import com.google.gson.reflect.TypeToken;
-import io.cucumber.core.internal.gherkin.deps.com.google.gson.Gson;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -9,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileUrlResource;
 import org.springframework.core.io.Resource;
 import org.springframework.jdbc.datasource.init.ScriptUtils;
-import pho.formulaone.web.beans.RaceResult;
 import pho.formulaone.web.cucumber.requests.APIRequests;
 
 import javax.sql.DataSource;
@@ -31,9 +31,11 @@ public class BasicAPITest {
     @Autowired
     private DataSource datasource;
 
+    final static ObjectMapper mapper = new ObjectMapper();
+
     @Given("The basics API sample data")
     public void theBasicsAPISampleData() throws SQLException {
-        Resource resource = new FileUrlResource(getClass().getResource("/basics.sql"));
+        Resource resource = new FileUrlResource(Objects.requireNonNull(getClass().getResource("/basics.sql")));
         ScriptUtils.executeSqlScript(datasource.getConnection(), resource);
     }
 
@@ -63,10 +65,9 @@ public class BasicAPITest {
     }
 
     @Then("I expect to see the following list")
-    public void iExpectToSeeTheFollowingList(List<Long> expected) {
-        Gson gson = new Gson();
+    public void iExpectToSeeTheFollowingList(List<Long> expected) throws JsonProcessingException {
         String result = responseEntityWrapper.response.getBody();
-        List<Long> actual = gson.fromJson(result, new TypeToken<List<Long>>(){}.getType());
+        List<Long> actual = mapper.readValue(result, new TypeReference<>() {});
 
         assertEquals(expected, actual,"ALL SEASONS");
     }
@@ -79,10 +80,9 @@ public class BasicAPITest {
     }
 
     @Then("I expect to see the following table")
-    public void iExpectToSeeTheFollowingTable(Map<String, Long> expected) {
-        Gson gson = new Gson();
+    public void iExpectToSeeTheFollowingTable(Map<String, Long> expected) throws JsonProcessingException {
         String result = responseEntityWrapper.response.getBody();
-        Map<String, Long> actual = gson.fromJson(result, new TypeToken<Map<String, Long>>(){}.getType());
+        Map<String, Long> actual = mapper.readValue(result, new TypeReference<>() {});
 
         assertEquals(expected, actual);
     }

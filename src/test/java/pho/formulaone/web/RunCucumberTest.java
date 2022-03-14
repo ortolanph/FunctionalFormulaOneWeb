@@ -8,7 +8,9 @@ import pho.formulaone.web.annotation.BehaviourTest;
 import static io.cucumber.junit.CucumberOptions.SnippetType.CAMELCASE;
 
 @RunWith(Cucumber.class)
-@CucumberOptions(plugin = {"pretty", "html:build/cucumberHtml", "json:build/cucumberJson/cucumber.json"}, strict = true, snippets = CAMELCASE,
+@CucumberOptions(
+        plugin = {"pretty", "html:build/cucumberHtml", "json:build/cucumberJson/cucumber.json"},
+        snippets = CAMELCASE,
         features = "src/test/features")
 @BehaviourTest
 public class RunCucumberTest {}

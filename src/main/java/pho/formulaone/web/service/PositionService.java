@@ -66,7 +66,7 @@ public class PositionService {
     }
 
     public List<RaceResult> endToEnd() {
-        log.debug("POSITIONS_API_END_TO_END");
+        log.debug("POSITIONS_API_END_TO_END_ALL_TIME");
         return filter(repository.findAll());
     }
 

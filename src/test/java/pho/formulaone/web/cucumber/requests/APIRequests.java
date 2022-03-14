@@ -85,4 +85,9 @@ public class APIRequests {
         String path = String.format("%s/season/%d/endtoend", positionsAPIEndpoint(), season);
         return restTemplate.getForEntity(path, String.class);
     }
+
+    public ResponseEntity<String> endToEndAllTime() {
+        String path = String.format("%s/endtoend", positionsAPIEndpoint());
+        return restTemplate.getForEntity(path, String.class);
+    }
 }
