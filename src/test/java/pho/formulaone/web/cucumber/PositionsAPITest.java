@@ -92,7 +92,7 @@ public class PositionsAPITest {
         RaceResult actual = mapper.readValue(result, RaceResult.class);
 
         assertEquals(pilot, actual.getPilot(),"WINNER OR POLE: name");
-        assertEquals(race, actual.getRace(),"WINNER OR POLE: race");
+        assertEquals(race, actual.getRace(),"WINNER OR POLE: race");    
     }
 
     @Then("I expect that this race did not have an end to end victory")

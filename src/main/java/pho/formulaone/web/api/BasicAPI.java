@@ -1,11 +1,7 @@
 package pho.formulaone.web.api;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import pho.formulaone.web.service.BasicService;
 
 import java.util.List;
@@ -16,8 +12,13 @@ import java.util.Map;
 @RequestMapping("/api/basics")
 public class BasicAPI {
 
+//    @Autowired
+    private final BasicService basicService;
+
     @Autowired
-    private BasicService basicService;
+    public BasicAPI(BasicService basicService) {
+        this.basicService = basicService;
+    }
 
     @GetMapping("/seasons")
     public @ResponseBody
